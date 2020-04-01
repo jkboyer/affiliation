@@ -4,7 +4,7 @@
 #author: Jan Boyer
 #inputs: Aff_R_20191213_01.csv           data that Cory sent me
 #        Affiliation Trial Master 2.csv
-#outputs:
+#outputs: data/clean/aff1.csv
 #dependencies:
 
 #packages used
@@ -36,8 +36,15 @@ aff1 <- aff1 %>%
 
 #Format dates and times
 aff1 <- aff1 %>%
+  #mutate makes new columns
+  #as.Date will tell R this column is date, and format it properly (2019-11-22)
+  #imported data was 22-nov-19, "%d-%b-%y" tells R what format it was in
   mutate(Date = as.Date(Date, format = "%d-%b-%y"),
+         #POSIXct is a datetime format, it's a bit easier to work with datetimes
+         #than times in R, so unless you really need date-free times, we'll
+         #do all the time math and analysis with datetimes
          datetime = as.POSIXct(paste(as.character(Date), Time)))
+         #If there is a reason you need time only, look at the 'chron' package
 
 #save the dataframe
 write.csv(aff1, "./data/clean/aff1.csv")
